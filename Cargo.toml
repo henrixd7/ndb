@@ -1,0 +1,11 @@
+[package]
+name = "ndb"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.2.7", features = ["cargo"] }
+nostr-db = { version = "0.4.3", features = ["search"] }
+#nostr-kv = "0.3.1"
+thiserror = "1.0.40"
+serde_json = "1.0.96"
