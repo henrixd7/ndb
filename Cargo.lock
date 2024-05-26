@@ -902,7 +902,9 @@ name = "ndb"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "hex",
  "nostr-db",
+ "serde",
  "serde_json",
  "thiserror",
 ]

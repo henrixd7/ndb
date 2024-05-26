@@ -1,10 +1,20 @@
 
 use nostr_db::{ Db, Error, Event, Filter, Stats/*, SortList */ };
-use std::path::Path;
+//use std::path::Path;
+use std::path::PathBuf;
 
 type Result<T, E = Error> = core::result::Result<T, E>;
 
-fn all(db: &Db, filter: &Filter) -> Result<(Vec<Event>, Stats)> {
+pub struct CmdArgs {
+    pub path: PathBuf,
+    pub filter: Filter,
+    pub count: bool,
+    pub delete: bool,
+    pub dryrun: bool,
+    pub pretty: bool
+}
+
+fn all(db: &Db, filter: Filter) -> Result<(Vec<Event>, Stats)> {
     let reader = db.reader()?;
     let mut iter = db.iter(&reader, &filter)?;
     let mut events = Vec::new();
@@ -15,25 +25,64 @@ fn all(db: &Db, filter: &Filter) -> Result<(Vec<Event>, Stats)> {
     Ok((events, iter.stats()))
 }
 
-fn count(db: &Db, filter: &Filter) -> Result<(u64, Stats)> {
-    let reader = db.reader()?;
-    let iter = db.iter::<String, _>(&reader, filter)?;
-    iter.size()
+pub fn app(mut args: CmdArgs) {
+
+    args.filter.build_words();
+
+    let db = Db::open(args.path).expect("db open");
+
+    let (events, _stats) = all(&db, args.filter).expect("all");
+    let count = events.len();
+
+    if args.count {
+        println!("count: {count:?}");
+        return;    
+    }
+
+    if args.delete {
+        if args.dryrun {
+            for event in events.iter() {
+                println!("Dry run: would delete id {}", hex::encode(event.id()));
+            }
+        } else {
+            for event in events.iter() {
+                println!("Deleting id {}", hex::encode(event.id()));
+            }
+            db.batch_del(events.iter().map(|e| e.id())).unwrap();
+        }
+    } else {
+        for e in events.iter() {
+            if args.pretty {
+                print_event_pretty(&e);
+            } else {
+                print_event_oneliner(&e);
+            }
+        }    
+    }
 }
 
-pub fn list(path: &Path, mut filter: Filter) {
-    filter.build_words();
+fn print_event_oneliner(event: &Event) {
+    println!(
+        "kind: {}, id: {}, npub: {}, created_at: {}, content: {}, sig: {}, tags: {:?}",
+            event.kind(),
+            hex::encode(event.id()),
+            hex::encode(event.pubkey()),
+            event.created_at(),
+            event.content(),
+            hex::encode(event.sig()),
+            event.tags()
+    );
+}
 
-    let db = Db::open(path).expect("db open");
-
-    let count = count(&db, &filter);
-    println!("count: {count:?}");
-
-    let el = all(&db, &filter).expect("all");
-    let _count2 = el.0.len();
-
-    for e in el.0.iter() {
-        println!("{e:?}");
-        println!("---------------------------------------------------");
-    }    
+fn print_event_pretty(event: &Event) {
+    println!(
+        "id: {}\nnpub: {}\nkind: {}\n, created_at: {}\n content: {}\n sig: {}",
+            hex::encode(event.id()),
+            hex::encode(event.pubkey()),
+            event.kind(),
+            event.created_at(),
+            event.content(),
+            hex::encode(event.sig()),
+    );
+    println!("");
 }
