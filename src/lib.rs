@@ -50,6 +50,7 @@ pub fn app(mut args: CmdArgs) {
             }
             db.batch_del(events.iter().map(|e| e.id())).unwrap();
         }
+        println!("Deleted {count} records")
     } else {
         for e in events.iter() {
             if args.pretty {
