@@ -1,7 +1,7 @@
 Ndb is simple commandline tool for Rnostr database
 
-Rnostr
-A high-performance and scalable nostr relay written in Rust.
+Rnostr  
+A high-performance and scalable nostr relay written in Rust.  
 https://github.com/rnostr/rnostr
 
 ```
