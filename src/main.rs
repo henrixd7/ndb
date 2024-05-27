@@ -34,7 +34,7 @@ fn get_args() -> ArgMatches {
             .long("filter")
             .help("JSON string to filter query results")
             .default_value("{}")
-            .conflicts_with_all(&["ids", "authors", "kinds", "since", "until", "limit", "search", "tags", "desc"]),
+            .conflicts_with_all(&["ids", "authors", "kinds", "since", "until", "limit", "search"/*, "tags"*/, "desc"]),
     )
     .arg(
         Arg::new("delete")
