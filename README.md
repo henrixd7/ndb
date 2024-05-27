@@ -17,7 +17,7 @@ You need to clone the repo
 > git clone https://github.com/henrixd7/ndb.git
 
 Compile and install
-> cd ndb\  
+> cd ndb  
 > cargo install --locked --path .  
 
 
