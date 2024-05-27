@@ -34,7 +34,7 @@ fn get_args() -> ArgMatches {
             .long("filter")
             .help("JSON string to filter query results")
             .default_value("{}")
-            .conflicts_with_all(&["ids", "authors", "kinds", "since", "until", "limit", "search"/*, "tags"*/, "desc"]),
+            .conflicts_with_all(&["ids", "authors", "kinds", "since", "until", "limit"/*, "search", "tags"*/, "desc"]),
     )
     .arg(
         Arg::new("delete")
@@ -51,7 +51,7 @@ fn get_args() -> ArgMatches {
     .arg(
         Arg::new("pretty")
             .long("pretty")
-            .help("Shows event in multiple lines and omits some info")
+            .help("Shows event in multiple lines")
             .action(ArgAction::SetTrue),
     )
     .arg(
@@ -105,6 +105,7 @@ fn get_args() -> ArgMatches {
             //.takes_value(true)
             .conflicts_with("filter"),
     )
+    /*
     .arg(
         Arg::new("search")
             .long("search")
@@ -112,7 +113,6 @@ fn get_args() -> ArgMatches {
             //.takes_value(true)
             .conflicts_with("filter"),
     )
-    /*
     .arg(
         Arg::new("tags")
             .long("tags")
@@ -177,9 +177,11 @@ fn main() {
             filter.limit = Some(limit.parse::<u64>().unwrap());
         }
 
+        /*
         if let Some(search) = matches.get_one::<String>("search") {
             filter.search = Some(search.to_string());
         }
+         */
 
         /*
         if let Some(tags) = matches.get_one::<String>("tags") {
@@ -199,6 +201,8 @@ fn main() {
 
         filter
     };
+
+    println!("{:?}", filter);
 
     let args = CmdArgs{
         path: matches.get_one::<PathBuf>("db").unwrap().clone(),

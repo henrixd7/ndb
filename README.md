@@ -11,28 +11,41 @@
 **Installation & Usage**
 
 You need Rust tools to compile
-> curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
 
 You need to clone the repo
-> git clone https://github.com/henrixd7/ndb.git
+```
+git clone https://github.com/henrixd7/ndb.git
+```
 
 Compile and install
-> cd ndb  
-> cargo install --locked --path .  
+```
+cd ndb  
+cargo install --locked --path .  
+```
 
 
 ```
 Usage: ndb [OPTIONS]
 
 Options:
-      --db <FILE>      Path to database [default: data/events]
-      --count          Just show count of matching records
-      --filter <json>  JSON string to filter query results [default: {}]
-      --delete         Delete ALL matching records from database
-      --dryrun         Skips actual deleting
-      --pretty         Shows event in multiple lines and omits some info
-  -h, --help           Print help
-  -V, --version        Print version
+      --db <db>            Path to database [default: data/events]
+      --count              Just show count of matching records
+      --filter <filter>    JSON string to filter query results [default: {}]
+      --delete             Delete ALL matching records from database
+      --dryrun             Skips actual deleting
+      --pretty             Shows event in multiple lines
+  -i, --ids <ids>          Comma-separated list of event ids
+  -a, --authors <authors>  Comma-separated list of authors
+  -k, --kinds <kinds>      Comma-separated list of kinds
+  -s, --since <since>      Start time for events
+  -u, --until <until>      End time for events
+  -l, --limit <limit>      Limit number of events
+  -d, --desc               Query by time descending order
+  -h, --help               Print help
+  -V, --version            Print version
 ```
 
 ```
