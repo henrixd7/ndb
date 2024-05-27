@@ -202,7 +202,7 @@ fn main() {
         filter
     };
 
-    println!("{:?}", filter);
+    //println!("{:?}", filter);
 
     let args = CmdArgs{
         path: matches.get_one::<PathBuf>("db").unwrap().clone(),
