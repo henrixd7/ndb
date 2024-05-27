@@ -62,28 +62,30 @@ pub fn app(mut args: CmdArgs) {
     }
 }
 
-fn print_event_oneliner(event: &Event) {
-    println!(
-        "kind: {}, id: {}, npub: {}, created_at: {}, content: {}, sig: {}, tags: {:?}",
-            event.kind(),
-            hex::encode(event.id()),
-            hex::encode(event.pubkey()),
-            event.created_at(),
-            event.content(),
-            hex::encode(event.sig()),
-            event.tags()
-    );
-}
+fn print_event_oneliner(event: &Event) { 
+    let content = event.content().replace("\n", " ");
+    println!( 
+        "kind: {}, id: {}, npub: {}, created_at: {}, content: {}, sig: {}, tags: {:?}", 
+            event.kind(), 
+            hex::encode(event.id()), 
+            hex::encode(event.pubkey()), 
+            event.created_at(), 
+            content, 
+            hex::encode(event.sig()), 
+            event.tags() 
+    ); 
+} 
 
-fn print_event_pretty(event: &Event) {
-    println!(
-        "id: {}\nnpub: {}\nkind: {}\n, created_at: {}\n content: {}\n sig: {}",
-            hex::encode(event.id()),
-            hex::encode(event.pubkey()),
-            event.kind(),
-            event.created_at(),
-            event.content(),
-            hex::encode(event.sig()),
-    );
-    println!("");
+fn print_event_pretty(event: &Event) { 
+    println!( 
+        "id         : {}\nnpub       : {}\nkind       : {}\ncreated_at : {}\ncontent    : {}\nsig        : {}", 
+            hex::encode(event.id()), 
+            hex::encode(event.pubkey()), 
+            event.kind(), 
+            event.created_at(), 
+            event.content().replace("\n", "\n             "), // Indent new lines in content
+            hex::encode(event.sig()), 
+    ); 
+    println!("tags       : {:?}", event.tags());
+    println!(""); 
 }
